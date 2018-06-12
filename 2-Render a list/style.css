@@ -1,0 +1,24 @@
+#list {
+	display: grid;
+	grid-template-columns: auto auto auto;
+}
+
+img {
+	max-width: 335px;
+}
+
+p {
+	margin-left: 5%;
+}
+
+.section {
+	background-color: #ffffff;
+	border-radius: 4%;
+	border: 1px solid #cccccc;
+	box-sizing: border-box;
+	height: 300px;
+	width: 335px;
+	overflow: hidden;
+	margin-bottom: 5%;
+}
+
