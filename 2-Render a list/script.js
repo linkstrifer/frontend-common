@@ -1,41 +1,97 @@
 class Cat {
-	constructor(name, image){
+	constructor({ id, name }) {
 		this.name = name;
-		this.image = image;
+		this.image = `img/cat${id}.jpg`;
 	}
 }
 
-const cat1 = new Cat('cat1', 'img/cat1.jpg');
-const cat2 = new Cat('cat2', 'img/cat2.jpg');
-const cat3 = new Cat('cat3', 'img/cat3.jpg');
-const cat4 = new Cat('cat4', 'img/cat4.jpg');
-const cat5 = new Cat('cat5', 'img/cat5.jpg');
-const cat6 = new Cat('cat6', 'img/cat6.jpg');
+class Dog {
+	constructor(id) {
+		this.name = `dog${id}`;
+		this.image = `img/dog${id}.jpg`;
+	}
+}
 
-const allCats = [cat1, cat2, cat3, cat4, cat5, cat6];
-
-
-const listView = {
-	init() {
-		this.list = document.getElementById('list');
-		this.render();
+const allCats = [
+	{
+		id: 1,
+		name: 'Pepito'
 	},
+	{
+		id: 2,
+		name: 'Nami'
+	}
+];
+
+class List {
+	constructor({
+		el,
+		data,
+		animal,
+		...rest
+	}) {
+		this.el = el;
+		this.data = data;
+		this.animal = animal;
+		this.rest = rest;
+
+		this.render = this.render.bind(this);
+		this.add = this.add.bind(this);
+
+		this.render();
+	}
+
+	createImage(imageData) {
+		const animal = new this.animal(imageData);
+		const newElementContainer = document.createElement('div');
+
+		for(const property in this.rest) {
+			newElementContainer.style[property] = this.rest[property];
+		}
+
+		newElementContainer.classList.add('section')
+		
+		const newElementName = document.createElement('p');
+		const newElementImage = document.createElement('img');
+		
+		newElementName.textContent = animal.name;
+		newElementImage.src = animal.image;
+
+		newElementContainer.appendChild(newElementName);
+		newElementContainer.appendChild(newElementImage);
+
+		return newElementContainer;
+	}
 
 	render() {
-		for(const cats of allCats){
-			const newElementContainer = document.createElement('div');
-			newElementContainer.classList.add('section')
-			const newElementName = document.createElement('p');
-			const newElementImage = document.createElement('img');
-			
-			newElementName.textContent = cats.name;
-			newElementImage.src = cats.image;
-
-			newElementContainer.appendChild(newElementName);
-			newElementContainer.appendChild(newElementImage);
-			list.appendChild(newElementContainer);
+		if (this.data && this.data.length > 0) {
+			this.data.forEach(imageData => {
+				this.el.appendChild(
+					this.createImage(imageData)
+				);
+			});
 		}
+	}
+
+	add(id) {
+		this.el.appendChild(
+			this.createImage(id)
+		);
 	}
 };
 
-listView.init();
+const list1 = new List({
+	el: document.querySelector('#list'),
+	data: allCats,
+	animal: Cat,
+	label: 'label',
+});
+
+const list2 = new List({
+	el: document.querySelector('#list2'),
+	data: allCats,
+	animal: Cat,
+	border: '1px solid #ccc',
+	backgroundColor: 'rgba(0,0,0,.5)',
+	color: 'white',
+});
